@@ -1,14 +1,14 @@
 import numpy as np
 from PIL import Image
 from tensorflow.keras.models import model_from_json
-from sklearn.preprocessing import LabelEncoder
+#from sklearn.preprocessing import LabelEncoder
 
 def getPrediction(file_path):
     
-    classes = ['NonDemented','VeryMildDemented','MildDemented','ModerateDemented']
-    le = LabelEncoder()
-    le.fit(classes)
-    le.inverse_transform([2])
+    #classes = ['NonDemented','VeryMildDemented','MildDemented','ModerateDemented']
+    #le = LabelEncoder()
+    #le.fit(classes)
+    #le.inverse_transform([2])
     
     
     #Load model
@@ -26,9 +26,20 @@ def getPrediction(file_path):
     
     pred = my_model.predict(img) #Predict                    
     
+    y_pred = [np.argmax(pred)][0]
+    
+    if y_pred == 0:
+        return 'NonDemented'
+    elif y_pred == 1:
+        return 'VeryMildDemented'
+    elif y_pred == 2:
+        return 'MildDemented'
+    elif y_pred == 3:
+        return 'ModerateDemented'
+    
     #Convert prediction to class name
-    pred_class = le.inverse_transform([np.argmax(pred)])[0]
+    # pred_class = le.inverse_transform([np.argmax(pred)])[0]
     # print("Diagnosis is:", pred_class)
-    return pred_class
+    # return pred_class
 
 # print(getPrediction("C:\\Users\\halo4\\OneDrive\\Up\\Clases\\Aprenizaje maquina 2\\test\\NonDemented\\26 (71).jpg"))

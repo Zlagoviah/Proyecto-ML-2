@@ -5,6 +5,8 @@ import tempfile
 import prediction
 
 app = Flask(__name__)
+
+app.secret_key = "secret key"
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
 # app.config['UPLOAD_FOLDER'] = "F:/Imagenes/"
 app.config['UPLOAD_FOLDER'] = tempfile.gettempdir()
@@ -31,12 +33,13 @@ def upload_file():
             filename = secure_filename(file.filename)
             # Here you should save the file
             # file.save("F:/Imagenes")
-            file_path = file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(filename)))
+            file = file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(filename)))
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(filename))
             # return 'File uploaded successfully'
         try:
             predict = prediction.getPrediction(file_path)
-            flash(predict)
-            return redirect('/')
+            # flash(predict)
+            return {'predict':predict}
         except Exception as error:
             print("Error:", error)
             return {'error': str(error)}, 500
