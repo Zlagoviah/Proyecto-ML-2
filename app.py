@@ -38,8 +38,10 @@ def upload_file():
             # return 'File uploaded successfully'
         try:
             predict = prediction.getPrediction(file_path)
+            # Aparece No File uploaded
             # flash(predict)
-            return {'predict':predict}
+            return {'Diagnosis is:':predict}
+            # return redirect('/')
         except Exception as error:
             print("Error:", error)
             return {'error': str(error)}, 500
